@@ -15,7 +15,7 @@ export default function ImageContainer({
         sizes="100vw"
         alt={name}
         className="object-cover  rounded-md"
-        priority
+        priority={false}
       />
     </section>
   );

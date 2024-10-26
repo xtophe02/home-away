@@ -18,7 +18,7 @@ export default function UserInfo({
         width={50}
         height={50}
         className="rounded-md w-12 h-12 object-cover"
-        priority
+        priority={false}
       />
       <div>
         <p>

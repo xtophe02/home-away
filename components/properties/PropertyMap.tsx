@@ -24,7 +24,7 @@ export default function PropertyMap({ countryCode }: { countryCode: string }) {
         <CountryFlagAndName countryCode={countryCode} />
       </div>
       <MapContainer
-        scrollWheelZoom={false}
+        scrollWheelZoom={true}
         zoomControl={false}
         className="h-[50vh] rounded-lg relative z-0"
         center={location || defaultLocation}
