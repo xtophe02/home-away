@@ -21,7 +21,7 @@ export default function NavSearch() {
     }
     // replace(`${pathname}?${params.toString()}`);
     replace(`/?${params.toString()}`);
-  }, 500);
+  }, 300);
   useEffect(() => {
     if (!searchParams.get("search")) {
       setSearch("");

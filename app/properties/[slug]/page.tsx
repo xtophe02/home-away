@@ -8,11 +8,15 @@ import ImageContainer from "@/components/properties/ImageContainer";
 import PropertyDetails from "@/components/properties/PropertyDetails";
 import ShareButton from "@/components/properties/ShareButton";
 import UserInfo from "@/components/properties/UserInfo";
+import PropertyReviews from "@/components/reviews/PropertyReviews";
+import SubmitReview from "@/components/reviews/SubmitReview";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { fetchPropertyDetails } from "@/utils/actions";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
+import { findExistingReview } from "@/utils/actions";
+import { auth } from "@clerk/nextjs/server";
 
 export default async function PropertyDetailsPage({
   params,
@@ -30,6 +34,10 @@ export default async function PropertyDetailsPage({
   if (!property) redirect("/");
   const { baths, bedrooms, beds, guests } = property;
   const details = { baths, bedrooms, beds, guests };
+  const { userId } = auth();
+  const isNotOwner = property.profile.clerkId !== userId;
+  const reviewDoesNotExist =
+    userId && isNotOwner && !(await findExistingReview(userId, property.id));
   return (
     <section>
       <BreadCrumbs name={property.name} />
@@ -63,6 +71,11 @@ export default async function PropertyDetailsPage({
           <BookingCalendar />
         </div>
       </section>
+      {reviewDoesNotExist && (
+        <SubmitReview propertyId={property.id} slug={property.slug} />
+      )}
+
+      <PropertyReviews propertyId={property.id} />
     </section>
   );
 }
