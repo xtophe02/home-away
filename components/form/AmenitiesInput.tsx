@@ -11,7 +11,7 @@ export default function AmenitiesInput({
   const [selectedAmenities, setSelectedAmenities] = useState<Amenity[]>(
     defaultValue || amenities
   );
-  void conservativeAmenities;
+
   const handleChange = (amenity: Amenity) => {
     setSelectedAmenities((prev) => {
       return prev.map((a) => {
