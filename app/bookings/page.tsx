@@ -50,14 +50,20 @@ export default async function BookingsPage() {
               checkOut,
               createdAt,
             } = booking;
-            const { id: propertyId, name, country, image } = booking.property;
+            const {
+              id: propertyId,
+              name,
+              country,
+              image,
+              slug,
+            } = booking.property;
             const startDate = formatDate(checkIn);
             const endDate = formatDate(checkOut);
             return (
               <TableRow key={id}>
                 <TableCell>
                   <Link
-                    href={`/properties/${propertyId}`}
+                    href={`/properties/${slug}`}
                     className="flex items-center space-x-2"
                   >
                     <Avatar>
