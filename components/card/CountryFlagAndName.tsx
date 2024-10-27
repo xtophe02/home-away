@@ -1,7 +1,11 @@
 import { findCountryByCode } from "@/utils/countries";
 import Flag from "react-world-flags";
 
-export function CountryFlagAndName({ countryCode }: { countryCode: string }) {
+export default function CountryFlagAndName({
+  countryCode,
+}: {
+  countryCode: string;
+}) {
   // console.log(countryCode);
   const validCountry = findCountryByCode(countryCode);
   // console.log(validCountry);

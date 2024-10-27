@@ -14,6 +14,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { uploadImage } from "./supabase";
 import slugify from "slugify";
+import { calculateTotals } from "./calculateTotals";
 
 const getAuthUser = async () => {
   const user = await currentUser();
@@ -279,6 +280,12 @@ export const fetchPropertyDetails = (slug: string) => {
     },
     include: {
       profile: true,
+      bookings: {
+        select: {
+          checkIn: true,
+          checkOut: true,
+        },
+      },
     },
   });
 };
@@ -350,7 +357,7 @@ export const fetchPropertyReviewsByUser = async () => {
   return reviews;
 };
 
-export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+export async function deleteReviewAction(prevState: { reviewId: string }) {
   const { reviewId } = prevState;
   const user = await getAuthUser();
 
@@ -367,19 +374,16 @@ export const deleteReviewAction = async (prevState: { reviewId: string }) => {
   } catch (error) {
     return renderError(error);
   }
-};
+}
 
-export const findExistingReview = async (
-  userId: string,
-  propertyId: string
-) => {
+export async function findExistingReview(userId: string, propertyId: string) {
   return db.review.findFirst({
     where: {
       profileId: userId,
       propertyId: propertyId,
     },
   });
-};
+}
 
 export async function fetchPropertyRating(propertyId: string) {
   const result = await db.review.groupBy({
@@ -400,4 +404,84 @@ export async function fetchPropertyRating(propertyId: string) {
     rating: result[0]?._avg.rating?.toFixed(1) ?? 0,
     count: result[0]?._count.rating ?? 0,
   };
+}
+
+export async function createBookingAction(prevState: {
+  propertyId: string;
+  checkIn: Date;
+  checkOut: Date;
+}) {
+  const user = await getAuthUser();
+
+  const { propertyId, checkIn, checkOut } = prevState;
+  const property = await db.property.findUnique({
+    where: { id: propertyId },
+    select: { price: true },
+  });
+  if (!property) {
+    return { message: "Property not found" };
+  }
+  const { orderTotal, totalNights } = calculateTotals({
+    checkIn,
+    checkOut,
+    price: property.price,
+  });
+
+  try {
+    const booking = await db.booking.create({
+      data: {
+        checkIn,
+        checkOut,
+        orderTotal,
+        totalNights,
+        profileId: user.id,
+        propertyId,
+      },
+    });
+  } catch (error) {
+    return renderError(error);
+  }
+  redirect("/bookings");
+}
+
+export async function fetchBookings() {
+  const user = await getAuthUser();
+  const bookings = await db.booking.findMany({
+    where: {
+      profileId: user.id,
+    },
+    include: {
+      property: {
+        select: {
+          id: true,
+          name: true,
+          country: true,
+          image: true,
+        },
+      },
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return bookings;
+}
+
+export async function deleteBookingAction(prevState: { bookingId: string }) {
+  const { bookingId } = prevState;
+  const user = await getAuthUser();
+
+  try {
+    const result = await db.booking.delete({
+      where: {
+        id: bookingId,
+        profileId: user.id,
+      },
+    });
+
+    revalidatePath("/bookings");
+    return { message: "Booking deleted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
 }

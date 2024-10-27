@@ -4,7 +4,7 @@ import { PropertyCardProps } from "@/utils/types";
 import { formatCurrency } from "@/utils/format";
 import { PropertyRating } from "./PropertyRating";
 
-import { CountryFlagAndName } from "./CountryFlagAndName";
+import CountryFlagAndName from "./CountryFlagAndName";
 import { FavoriteToggleButton } from "./FavoriteToggleButton";
 
 export function PropertyCard({ property }: { property: PropertyCardProps }) {

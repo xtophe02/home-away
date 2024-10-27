@@ -1,4 +1,4 @@
-import { EmptyList } from "@/components/home/EmptyList";
+import EmptyList from "@/components/home/EmptyList";
 import {
   deleteReviewAction,
   fetchPropertyReviewsByUser,

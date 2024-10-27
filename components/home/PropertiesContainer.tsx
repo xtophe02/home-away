@@ -1,7 +1,7 @@
 import { fetchProperties } from "@/utils/actions";
 
 import type { PropertyCardProps } from "@/utils/types";
-import { EmptyList } from "./EmptyList";
+import EmptyList from "./EmptyList";
 import { PropertiesList } from "./PropertiesList";
 
 export async function PropertiesContainer({

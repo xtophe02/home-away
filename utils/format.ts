@@ -11,3 +11,11 @@ export const formatCurrency = (amount: number | null) => {
 export function formatQuantity(quantity: number, noun: string): string {
   return quantity === 1 ? `${quantity} ${noun}` : `${quantity} ${noun}s`;
 }
+
+export const formatDate = (date: Date) => {
+  return new Intl.DateTimeFormat("en-EU", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+};

@@ -1,7 +1,7 @@
 import { Button } from "../ui/button";
 import Link from "next/link";
 
-export function EmptyList({
+export default function EmptyList({
   heading = "No items in the list.",
   message = "Keep exploring our properties.",
   btnText = "back home",

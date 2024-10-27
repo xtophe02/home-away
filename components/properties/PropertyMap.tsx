@@ -10,7 +10,7 @@ const markerIcon = icon({
 });
 
 import { findCountryByCode } from "@/utils/countries";
-import { CountryFlagAndName } from "../card/CountryFlagAndName";
+import CountryFlagAndName from "../card/CountryFlagAndName";
 import Title from "./Title";
 
 export default function PropertyMap({ countryCode }: { countryCode: string }) {
@@ -24,7 +24,7 @@ export default function PropertyMap({ countryCode }: { countryCode: string }) {
         <CountryFlagAndName countryCode={countryCode} />
       </div>
       <MapContainer
-        scrollWheelZoom={true}
+        scrollWheelZoom={false}
         zoomControl={false}
         className="h-[50vh] rounded-lg relative z-0"
         center={location || defaultLocation}
