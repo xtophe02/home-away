@@ -68,7 +68,7 @@ export default async function RentalsPage() {
                 <TableCell>{formatCurrency(orderTotalSum)}</TableCell>
 
                 <TableCell className="flex items-center gap-x-2">
-                  <Link href={`/rentals/${propertyId}/edit`}>
+                  <Link href={`/rentals/${slug}/edit`}>
                     <IconButton actionType="edit"></IconButton>
                   </Link>
                   <DeleteRental propertyId={propertyId} />
